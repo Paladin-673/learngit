@@ -1,6 +1,6 @@
 #!C:\python27\
 # -*- coding: cp936 -*-
-#ç³—äº‹ç™¾ç§‘çˆ¬è™«ï¼Œè¶…æ–¹ä¾¿
+#ôÜÊÂ°Ù¿ÆÅÀ³æ£¬¼òµ¥ÓÖ·½±ã£¬python°æ±¾Îª2.7
 
 __author__='Moon'
 
@@ -11,104 +11,104 @@ import re
 import thread
 import time
 
-#ç³—äº‹ç™¾ç§‘çˆ¬è™«ç±»
+#ôÜÊÂ°Ù¿ÆÅÀ³æÀà
 class QSBK:
 
-    #åˆå§‹åŒ–æ–¹æ³•ï¼Œå®šä¹‰ä¸€äº›å˜é‡
+    #³õÊ¼»¯·½·¨£¬¶¨ÒåÒ»Ğ©±äÁ¿
     def __init__(self):
         self.pageIndex=1
         self.user_agent='Mozilla/4.0 (compatible;MSIE 5.5;Windows NT)'
-        #åˆå§‹åŒ–headers
+        #³õÊ¼»¯headers
         self.headers={'User-Agent':self.user_agent}
-        #å­˜æ”¾æ®µå­çš„å˜é‡ï¼Œæ¯ä¸€ä¸ªå…ƒç´ æ˜¯æ¯ä¸€é¡µçš„æ®µå­ä»¬
+        #´æ·Å¶Î×ÓµÄ±äÁ¿£¬Ã¿Ò»¸öÔªËØÊÇÃ¿Ò»Ò³µÄ¶Î×ÓÃÇ
         self.stories=[]
-        #å­˜æ”¾æ˜¯å¦ç»§ç»­è¿è¡Œçš„å˜é‡
+        #´æ·ÅÊÇ·ñ¼ÌĞøÔËĞĞµÄ±äÁ¿
         self.enable=False
 
-    #ä¼ å…¥æŸä¸€é¡µçš„ç´¢å¼•è·å¾—é¡µé¢ä»£ç 
+    #´«ÈëÄ³Ò»Ò³µÄË÷Òı»ñµÃÒ³Ãæ´úÂë
     def getPage(self,pageIndex):
         try:
             url='http://www.qiushibaike.com/hot/page/' + str(pageIndex)
-            #æ„å»ºè¯·æ±‚çš„request
+            #¹¹½¨ÇëÇóµÄrequest
             request=urllib2.Request(url,headers=self.headers)
-            #åˆ©ç”¨urlopenè·å–é¡µé¢ä»£ç 
+            #ÀûÓÃurlopen»ñÈ¡Ò³Ãæ´úÂë
             response=urllib2.urlopen(request)
-            #å°†é¡µé¢è½¬åŒ–ä¸ºUTF-8ç¼–ç 
+            #½«Ò³Ãæ×ª»¯ÎªUTF-8±àÂë
             pageCode=response.read().decode('utf-8')
             return pageCode
 
         except urllib2.URLError,e:
             if hasattr(e,"reason"):
-                print u"è¿æ¥ç³—äº‹ç™¾ç§‘å¤±è´¥ï¼Œé”™è¯¯åŸå› ï¼š",e.reason
+                print u"Á¬½ÓôÜÊÂ°Ù¿ÆÊ§°Ü£¬´íÎóÔ­Òò£º",e.reason
                 return None
 
-    #ä¼ å…¥æŸä¸€é¡µä»£ç ï¼Œè¿”å›æœ¬é¡µä¸å¸¦å›¾ç‰‡çš„æ®µå­åˆ—è¡¨
+    #´«ÈëÄ³Ò»Ò³´úÂë£¬·µ»Ø±¾Ò³²»´øÍ¼Æ¬µÄ¶Î×ÓÁĞ±í
     def getPageItems(self,pageIndex):
         pageCode=self.getPage(pageIndex)
         if not pageCode:
-            print "é¡µé¢åŠ è½½å¤±è´¥...."
+            print "Ò³Ãæ¼ÓÔØÊ§°Ü...."
             return None
         pattern = re.compile('<div class="author clearfix">.*?<h2>(.*?)</h2>.*?<div class="content">.*?<span>(.*?)</span>.*?</div>(.*?)<div class="stats">.*?<i class="number">(.*?)</i>.*?</span>', re.S)
         items=re.findall(pattern,pageCode)
-        #ç”¨æ¥å­˜å‚¨æ¯é¡µçš„æ®µå­ä»¬
+        #ÓÃÀ´´æ´¢Ã¿Ò³µÄ¶Î×ÓÃÇ
         pageStories=[]
-        #éå†æ­£åˆ™è¡¨è¾¾å¼åŒ¹é…çš„ä¿¡æ¯
+        #±éÀúÕıÔò±í´ïÊ½Æ¥ÅäµÄĞÅÏ¢
         for item in items:
-            #æ˜¯å¦å«æœ‰å›¾ç‰‡
+            #ÊÇ·ñº¬ÓĞÍ¼Æ¬
             haveImg=re.search("img",item[2])
-            #å¦‚æœä¸å«æœ‰å›¾ç‰‡ï¼ŒæŠŠå®ƒåŠ å…¥listä¸­
+            #Èç¹û²»º¬ÓĞÍ¼Æ¬£¬°ÑËü¼ÓÈëlistÖĞ
             if not haveImg:
                 replaceBR=re.compile('<br/>')
                 text=re.sub(replaceBR,"\n",item[1])
-                #item[0]æ˜¯ä¸€ä¸ªæ®µå­çš„å‘å¸ƒè€…ï¼Œitem[1]æ˜¯æ®µå­å†…å®¹ï¼Œitem[3]æ˜¯ç‚¹èµæ•°
+                #item[0]ÊÇÒ»¸ö¶Î×ÓµÄ·¢²¼Õß£¬item[1]ÊÇ¶Î×ÓÄÚÈİ£¬item[3]ÊÇµãÔŞÊı
                 pageStories.append([item[0].strip(),text.strip(),item[3].strip()])
         return pageStories
 
-    #åŠ è½½å¹¶æå–é¡µé¢çš„å†…å®¹ï¼ŒåŠ å…¥åˆ°åˆ—è¡¨ä¸­
+    #¼ÓÔØ²¢ÌáÈ¡Ò³ÃæµÄÄÚÈİ£¬¼ÓÈëµ½ÁĞ±íÖĞ
     def loadPage(self):
-        #å¦‚æœå½“å‰æœªçœ‹çš„é¡µæ•°å°‘äº2é¡µï¼Œåˆ™åŠ è½½æ–°ä¸€é¡µ
+        #Èç¹ûµ±Ç°Î´¿´µÄÒ³ÊıÉÙÓÚ2Ò³£¬Ôò¼ÓÔØĞÂÒ»Ò³
         if self.enable==True:
             if len(self.stories)<2:
-                #è·å–æ–°çš„ä¸€é¡µ
+                #»ñÈ¡ĞÂµÄÒ»Ò³
                 pageStories=self.getPageItems(self.pageIndex)
-                #å°†è¯¥é¡µçš„æ®µå­å­˜æ”¾åˆ°å…¨å±€listä¸­
+                #½«¸ÃÒ³µÄ¶Î×Ó´æ·Åµ½È«¾ÖlistÖĞ
                 if pageStories:
                     self.stories.append(pageStories)
-                    #è·å–å®Œä¹‹åé¡µç ç´¢å¼•åŠ ä¸€ï¼Œè¡¨ç¤ºä¸‹æ¬¡è¯»å–ä¸‹ä¸€é¡µ
+                    #»ñÈ¡ÍêÖ®ºóÒ³ÂëË÷Òı¼ÓÒ»£¬±íÊ¾ÏÂ´Î¶ÁÈ¡ÏÂÒ»Ò³
                     self.pageIndex+=1
 
-    #è°ƒç”¨è¯¥æ–¹æ³•ï¼Œæ¯æ¬¡æ•²å›è½¦æ‰“å°è¾“å‡ºä¸€ä¸ªæ®µå­
+    #µ÷ÓÃ¸Ã·½·¨£¬Ã¿´ÎÇÃ»Ø³µ´òÓ¡Êä³öÒ»¸ö¶Î×Ó
     def getOneStory(self,pageStories,page):
-        #éå†ä¸€é¡µçš„æ®µå­
+        #±éÀúÒ»Ò³µÄ¶Î×Ó
         for story in pageStories:
-            #ç­‰å¾…ç”¨æˆ·è¾“å…¥
+            #µÈ´ıÓÃ»§ÊäÈë
             input=raw_input()
-            #æ¯å½“è¾“å…¥å›è½¦ä¸€æ¬¡ï¼Œåˆ¤æ–­ä¸€ä¸‹æ˜¯å¦è¦åŠ è½½æ–°é¡µé¢
+            #Ã¿µ±ÊäÈë»Ø³µÒ»´Î£¬ÅĞ¶ÏÒ»ÏÂÊÇ·ñÒª¼ÓÔØĞÂÒ³Ãæ
             self.loadPage()
-            #å¦‚æœè¾“å…¥Qåˆ™ç¨‹åºç»“æŸ
+            #Èç¹ûÊäÈëQÔò³ÌĞò½áÊø
             if input=="Q":
                 self.enable=False
                 return
-            print u"ç¬¬%dé¡µ\tå‘å¸ƒäººï¼š%s\tèµï¼š%s\n%s"%(page,story[0],story[2],story[1])
+            print u"µÚ%dÒ³\t·¢²¼ÈË£º%s\tÔŞ£º%s\n%s"%(page,story[0],story[2],story[1])
 
-    #å¼€å§‹æ–¹æ³•
+    #¿ªÊ¼·½·¨
     def start(self):
-        print u"æ­£åœ¨è¯»å–ç³—äº‹ç™¾ç§‘ï¼ŒæŒ‰å›è½¦æŸ¥çœ‹æ–°æ®µå­ï¼ŒæŒ‰Qé€€å‡º"
-        #ä½¿å˜é‡ä¸ºTrueï¼Œç¨‹åºå¯ä»¥æ­£å¸¸è¿è¡Œ
+        print u"ÕıÔÚ¶ÁÈ¡ôÜÊÂ°Ù¿Æ£¬°´»Ø³µ²é¿´ĞÂ¶Î×Ó£¬°´QÍË³ö"
+        #Ê¹±äÁ¿ÎªTrue£¬³ÌĞò¿ÉÒÔÕı³£ÔËĞĞ
         self.enable=True
-        #å…ˆåŠ è½½ä¸€é¡µå†…å®¹
+        #ÏÈ¼ÓÔØÒ»Ò³ÄÚÈİ
         self.loadPage()
-        #å±€éƒ¨å˜é‡ï¼Œæ§åˆ¶å½“å‰è¯»åˆ°äº†ç¬¬å‡ é¡µ
+        #¾Ö²¿±äÁ¿£¬¿ØÖÆµ±Ç°¶Áµ½ÁËµÚ¼¸Ò³
         nowPage=0
         while self.enable:
             if len(self.stories)>0:
-                #ä»å…¨å±€listä¸­è·å–ä¸€é¡µçš„æ®µå­
+                #´ÓÈ«¾ÖlistÖĞ»ñÈ¡Ò»Ò³µÄ¶Î×Ó
                 pageStories=self.stories[0]
-                #å½“å‰è¯»åˆ°çš„é¡µæ•°åŠ ä¸€
+                #µ±Ç°¶Áµ½µÄÒ³Êı¼ÓÒ»
                 nowPage+=1
-                #å°†å…¨å±€listä¸­ç¬¬ä¸€ä¸ªå…ƒç´ åˆ é™¤ï¼Œå› ä¸ºå·²ç»å–å‡º
+                #½«È«¾ÖlistÖĞµÚÒ»¸öÔªËØÉ¾³ı£¬ÒòÎªÒÑ¾­È¡³ö
                 del self.stories[0]
-                #è¾“å‡ºè¯¥é¡µçš„æ®µå­
+                #Êä³ö¸ÃÒ³µÄ¶Î×Ó
                 self.getOneStory(pageStories,nowPage)
 
 if __name__=="__main__":
