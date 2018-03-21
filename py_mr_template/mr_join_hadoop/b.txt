@@ -1,0 +1,4 @@
+xiaohong	26
+xiaoming	78
+dalong	24
+wangzai	32

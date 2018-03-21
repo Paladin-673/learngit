@@ -1,0 +1,11 @@
+xiaohong	java
+xiaoming	python
+xiaoxiao	java
+xiaoxiao	python
+xiaoxiao	php
+dalong	hadoop
+dalong	java
+dalong	php
+wangzai	hive
+wangzai	mapreduce
+wangzai	python

@@ -1,0 +1,11 @@
+xiaohong	1	java
+xiaoming	1	python
+xiaoxiao	1	java
+xiaoxiao	1	python
+xiaoxiao	1	php
+dalong	1	hadoop
+dalong	1	java
+dalong	1	php
+wangzai	1	hive
+wangzai	1	mapreduce
+wangzai	1	python
