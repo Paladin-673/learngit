@@ -1,0 +1,7 @@
+>>> workbook = xlrd.open_workbook("E:\\learngit\\learngit\\dailyexcel_to_txt\\3G质量监控工单_20180402.xls",formatting_info=True)
+>>> worksheet = workbook.sheet_by_name('日报统计')
+>>> formatIndex = worksheet.cell_xf_index(35,26)
+>>> format = workbook.xf_list[189]
+>>> font = workbook.font_list[format.font_index]
+>>> color = workbook.colour_map[font.colour_index]
+>>> print(color)
